@@ -1,5 +1,5 @@
-const { expect } = require("chai");
-const { ethers } = require("ethers");
+// const { expect } = require("chai");
+// const { ethers } = require("ethers");
 
 describe("Greeter", function () {
   it("Should create and execute market sales", async function () {
@@ -27,5 +27,15 @@ describe("Greeter", function () {
     await market.createMarketItem(nftContractAddress, 2, auctionPrice, {
       value: listingPrice,
     });
+
+    const [_, buyerAddress] = await ethers.getSigners();
+
+    await market
+      .connect(buyerAddress)
+      .createMarketSale(nftContractAddress, 1, { value: auctionPrice });
+
+    const items = await market.fetchMarketItems();
+
+    console.log("items: ", items);
   });
 });
